@@ -18,28 +18,37 @@ def multiply(cursor):
 
 
 def stop(cursor):
-    print(f'Final list: {opcodes}')
-    raise SystemExit
+    print(f'Final list: {opcodes[0]}')
+
+    if opcodes[0] == 19690720:
+        print(100 * opcodes[1] + opcodes[2])
+        raise SystemExit
+    else:
+        return
 
 
 if __name__ == "__main__":
 
     with open('day2.txt') as fin:
-        contents = fin.read()
-
-    opcodes = list(map(int, contents.split(',')))
+        contents = fin.read()    
     
-    #specified overwrites
-    opcodes[1] = 12
-    opcodes[2] = 2
-
     switch_dict = {
         '1': add,
         '2': multiply,
         '99': stop
     }
+    
+    for noun in range(0, 100):
+        for verb in range(0, 100):
+            print(f'Testing {noun} and {verb}')
+            opcodes = []
+            opcodes = list(map(int, contents.split(',')))
+            
+            #specified overwrites
+            opcodes[1] = noun
+            opcodes[2] = verb
+            cursor = 0
 
-    cursor = 0
-    while True:
-        op = str(opcodes[cursor])
-        cursor = switch_dict[op](cursor)
+            while cursor is not None:
+                op = str(opcodes[cursor])
+                cursor = switch_dict[op](cursor)
