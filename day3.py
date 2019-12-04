@@ -55,3 +55,5 @@ if __name__ == "__main__":
             min_point = i
 
     print(f'Minimum manhattan distance is {min_length} to {min_point}')
+
+    # TODO take all of the intersections and step through the decomposed line strings calculating the length all the way. Find minimum.
