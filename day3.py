@@ -2,12 +2,12 @@ from shapely.geometry import LineString
 
 def decompose(figure):
     moves = figure.split(',')
-    points = []
+    points = [(0,0)]
     
     for move in moves:
         direction = move[0]
         length = int(move[1:])
-        if points:
+        if len(points) > 1:
             prev_point = newpoint
         else:
             prev_point = (0,0)
@@ -25,9 +25,9 @@ def decompose(figure):
             print(f'Encountered an incorrect direction, {direction}, bailing!')
             raise SystemExit
 
-        points.append(LineString([prev_point, newpoint]))
+        points.append(newpoint)
 
-    return points
+    return LineString(points)
 
 if __name__ == "__main__":
     
@@ -40,19 +40,19 @@ if __name__ == "__main__":
     lines1 = decompose(fig1)
     lines2 = decompose(fig2)    
 
-    for line_a in lines1:
-        for line_b in lines2:
-            result = line_a.intersection(line_b)
-            if result:
-                isections.append(result)
+    
+    isections = lines1.intersection(lines2)
 
     min_length = None
     
-    for i in isections[1:]:
+    for i in isections:
         man_dist = abs(i.bounds[0]) + abs(i.bounds[1])
+        print(f'Intersection at {i}, distance is {man_dist}')
+
         if not min_length or man_dist < min_length:
             min_length = man_dist
             min_point = i
+
 
     print(f'Minimum manhattan distance is {min_length} to {min_point}')
 
