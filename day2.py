@@ -4,7 +4,7 @@ def get_nums(cursor):
 def add(cursor):
     num1, num2, idx = get_nums(cursor)
     
-    # print(f'adding {num1} and {num2}, storing at index {idx}')
+    print(f'adding {num1} and {num2}, storing at index {idx}')
     opcodes[idx] = num1 + num2
     return cursor + 4
 
@@ -12,7 +12,7 @@ def add(cursor):
 def multiply(cursor):
     num1, num2, idx = get_nums(cursor)
 
-    # print(f'multiplying {num1} and {num2}, storing at index {idx}')
+    print(f'multiplying {num1} and {num2}, storing at index {idx}')
     opcodes[idx] = num1 * num2
     return cursor + 4
 
