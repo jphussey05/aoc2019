@@ -9,6 +9,52 @@ def get_nums(cursor, num_items):
     return answer
 
 
+def jump_if_true(cursor, modes):
+    # TODO add the modes to this
+    idx = get_nums(cursor, 1)
+    x = int(opcodes[idx[0]])
+    print(f'Evaluating zero-ness of {x}')
+    if x !=0:
+        print(f'It is not 0, setting cursor to {x}')
+        return x
+    else:
+        print(f'Not modifying cursor')
+        return cursor + 2
+
+
+def jump_if_false(cursor, modes):
+    # TODO add the modes to this
+    idx = get_nums(cursor, 1)
+    x = int(opcodes[idx[0]])
+    print(f'Evaluating zero-ness of {x}')
+    if x ==0:
+        print(f'It is 0, setting cursor to {x}')
+        return x
+    else:
+        print(f'Not modifying cursor')
+        return cursor + 2
+
+
+def less_than(cursor, modes):
+    parameters = get_nums(cursor, 3)
+    values = []
+
+    for i, para in enumerate(parameters):
+        print(f'{para} has mode {modes[i]}')
+        if i == len(parameters) - 1:
+            print(f'parameter for storage, making it positional')
+            values.append(para)
+        elif int(modes[i]) == 1:
+            print(f'value becomes {para}')
+            values.append(int(para))
+        else:
+
+            print(f'value becomes {opcodes[para]}')
+            values.append(int(opcodes[para]))
+
+def equals(cursor, modes):
+    pass
+
 def add(cursor, modes):
     parameters = get_nums(cursor, 3)
     values = []
@@ -28,7 +74,6 @@ def add(cursor, modes):
 
     num1, num2, idx = values
     print(f'adding {num1} and {num2}, storing at index {idx}')
-    print(type(num1), type(num2))
     opcodes[idx] = num1 + num2
     return cursor + len(parameters) + 1
 
