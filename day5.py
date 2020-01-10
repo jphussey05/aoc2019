@@ -10,29 +10,57 @@ def get_nums(cursor, num_items):
 
 
 def jump_if_true(cursor, modes):
-    # TODO add the modes to this
-    idx = get_nums(cursor, 1)
-    x = int(opcodes[idx[0]])
-    print(f'Evaluating zero-ness of {x}')
-    if x !=0:
-        print(f'It is not 0, setting cursor to {x}')
-        return x
-    else:
-        print(f'Not modifying cursor')
-        return cursor + 2
+    '''
+    get two parameters;
+    return instruction pointer with value of 2nd if 1st is non-zero;
+    else do nothing
+    '''
+    parameters = get_nums(cursor, 2)
+    values = []
 
+    for i, para in enumerate(parameters):
+        print(f'{para} has mode {modes[i]}')
+        if int(modes[i] == 1):  # immediate mode
+            print(f'value becomes {para}')
+            values.append(int(para))
+        else:
+            print(f'value becomes {opcodes[para]}')
+            values.append(int(opcodes[para]))
+
+    if values[0] == 0:
+        return cursor + 2
+    
+    if int(modes[1]) == 1:  #check if the mode is 1 and use absolute value
+        return int(values[1])
+    else:  # otherwise mode is 2 and its a reference value
+        return int(opcodes[values[1]])
 
 def jump_if_false(cursor, modes):
-    # TODO add the modes to this
-    idx = get_nums(cursor, 1)
-    x = int(opcodes[idx[0]])
-    print(f'Evaluating zero-ness of {x}')
-    if x ==0:
-        print(f'It is 0, setting cursor to {x}')
-        return x
-    else:
-        print(f'Not modifying cursor')
+    '''
+    get two parameters;
+    return instruction pointer with value of 2nd if 1st is zero;
+    else do nothing
+    '''
+    parameters = get_nums(cursor, 2)
+    values = []
+
+    for i, para in enumerate(parameters):
+        print(f'{para} has mode {modes[i]}')
+        if int(modes[i] == 1):  # immediate mode
+            print(f'value becomes {para}')
+            values.append(int(para))
+        else:
+            print(f'value becomes {opcodes[para]}')
+            values.append(int(opcodes[para]))
+   
+
+    if values[0] != 0:
         return cursor + 2
+
+    if int(modes[1]) == 1:  #check if the mode is 1 and use absolute value
+        return int(values[1])
+    else:  # otherwise mode is 2 and its a reference value
+        return int(opcodes[values[1]])
 
 
 def less_than(cursor, modes):
@@ -44,16 +72,47 @@ def less_than(cursor, modes):
         if i == len(parameters) - 1:
             print(f'parameter for storage, making it positional')
             values.append(para)
-        elif int(modes[i]) == 1:
+        elif int(modes[i]) == 1:  # immediate mode
             print(f'value becomes {para}')
             values.append(int(para))
-        else:
-
+        else:  # position mode
             print(f'value becomes {opcodes[para]}')
             values.append(int(opcodes[para]))
 
+    num1, num2, idx = values
+    print(f'Checking if {num1} is less than {num2} and storing in {idx}')
+
+    if num1 < num2:
+        opcodes[idx] = 1
+    else:
+        opcodes[idx] = 0
+
+    return cursor + 4
+
 def equals(cursor, modes):
-    pass
+    parameters = get_nums(cursor, 3)
+    values = []
+
+    for i, para in enumerate(parameters):
+        print(f'{para} has mode {modes[i]}')
+        if i == len(parameters) - 1:
+            print(f'parameter for storage, making it positional')
+            values.append(para)
+        elif int(modes[i]) == 1:  # immediate mode
+            print(f'value becomes {para}')
+            values.append(int(para))
+        else:  # position mode
+            print(f'value becomes {opcodes[para]}')
+            values.append(int(opcodes[para]))
+
+    num1, num2, idx = values
+    print(f'Checking if {num1} equals {num2} and storing in {idx}')
+    if num1 == num2:
+        opcodes[idx] = 1
+    else:
+        opcodes[idx] = 0
+
+    return cursor + 4
 
 def add(cursor, modes):
     parameters = get_nums(cursor, 3)
@@ -68,7 +127,6 @@ def add(cursor, modes):
             print(f'value becomes {para}')
             values.append(int(para))
         else:
-
             print(f'value becomes {opcodes[para]}')
             values.append(int(opcodes[para]))
 
@@ -105,9 +163,8 @@ def save(cursor, modes):
     idx = get_nums(cursor, 1)
     print(f'Saving input at {idx}')
 
-    opcodes[idx[0]] = input('Please enter your input: ')
+    opcodes[idx[0]] = int(input('Please enter your input: '))
     
-    print(f'Incrementing the cursor to {cursor + 2}')
     return cursor + 2
     
 
@@ -144,10 +201,11 @@ if __name__ == "__main__":
     cursor = 0 
 
     while cursor is not None:
-        # print(f'Opcodes are {opcodes}')
+        print(f'Opcodes are {opcodes}')
         parameter = str(opcodes[cursor])
         op = parameter[-2:]
         op = ('0' + op) if len(op) == 1 else op
         modes = parameter[:-2][::-1] + '000' # flips the modes so they are left to right
         print(f'Opcode is {op} and modes are {modes}, calling {switch_dict[op]}')
         cursor = switch_dict[op](cursor, modes)
+        print(f'cursor has been changed to {cursor}')
