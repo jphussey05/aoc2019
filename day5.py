@@ -20,20 +20,24 @@ def jump_if_true(cursor, modes):
 
     for i, para in enumerate(parameters):
         print(f'{para} has mode {modes[i]}')
-        if int(modes[i] == 1):  # immediate mode
-            print(f'value becomes {para}')
+        if int(modes[i]) == 1:  # immediate mode
+            print(f'value becomes {para} via immediate mode')
             values.append(int(para))
         else:
-            print(f'value becomes {opcodes[para]}')
+            print(f'value becomes {opcodes[para]} via position mode')
             values.append(int(opcodes[para]))
 
     if values[0] == 0:
-        return cursor + 2
-    
-    if int(modes[1]) == 1:  #check if the mode is 1 and use absolute value
+        print(f'First parameter was zero, increasing cursor and bailing')
+        return cursor + 3
+    else:
         return int(values[1])
-    else:  # otherwise mode is 2 and its a reference value
-        return int(opcodes[values[1]])
+    # if int(modes[1]) == 1:  #check if the mode is 1 and use absolute value
+    #     print(f'Mode was immediate, returning {values[1]} as new cursor')
+    #     return int(values[1])
+    # else:  # otherwise mode is 2 and its a reference value
+    #     print(f'Mode was position, returning {opcodes[values[1]]} as new cursor')
+    #     return int(opcodes[values[1]])
 
 def jump_if_false(cursor, modes):
     '''
@@ -46,21 +50,25 @@ def jump_if_false(cursor, modes):
 
     for i, para in enumerate(parameters):
         print(f'{para} has mode {modes[i]}')
-        if int(modes[i] == 1):  # immediate mode
-            print(f'value becomes {para}')
+        if int(modes[i]) == 1:  # immediate mode
+            print(f'value becomes {para} via immediate mode')
             values.append(int(para))
         else:
-            print(f'value becomes {opcodes[para]}')
+            print(f'value becomes {opcodes[para]} via position mode')
             values.append(int(opcodes[para]))
    
 
     if values[0] != 0:
-        return cursor + 2
-
-    if int(modes[1]) == 1:  #check if the mode is 1 and use absolute value
+        print(f'First parameter was not zero, increasing cursor and bailing')
+        return cursor + 3
+    else:
         return int(values[1])
-    else:  # otherwise mode is 2 and its a reference value
-        return int(opcodes[values[1]])
+    # if int(modes[1]) == 1:  #check if the mode is 1 and use absolute value
+    #     print(f'Mode was immediate, returning {values[1]} as new cursor')
+    #     return int(values[1])
+    # else:  # otherwise mode is 2 and its a reference value
+    #     print(f'Mode was position, returning {opcodes[values[1]]} as new cursor')
+    #     return int(opcodes[values[1]])
 
 
 def less_than(cursor, modes):
@@ -148,7 +156,6 @@ def multiply(cursor, modes):
             print(f'value becomes {para}')
             values.append(para)
         else:
-
             print(f'value becomes {opcodes[para]}')
             values.append(int(opcodes[para]))
        
@@ -171,9 +178,11 @@ def save(cursor, modes):
 
 def output(cursor, modes):
     idx = get_nums(cursor, 1)
-    print(f'Outputing the value at {idx}')
+    if int(modes[0]) == 1:
+        print(f'Mode was immediate, value is {idx[0]}')
+    else:
+        print(f'Mode was positional, value is {opcodes[idx[0]]}')
 
-    print(opcodes[idx[0]])
     return cursor + 2
 
 def stop(cursor, modes):
