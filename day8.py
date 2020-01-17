@@ -1,6 +1,9 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from pprint import pprint
+
 with open('day8.txt') as fin:
     contents = fin.read()
-
 
 width = 25
 height = 6
@@ -36,7 +39,15 @@ for layer in layer_list:
             if int(final_image[idx]) == 2:
                 final_image[idx] = val
     
-print(min_zero_cnt, min_zero_product)
+image_array = list()
+cur_row = list()
 for i, c in enumerate(final_image):
+    if i % width == 0 and i > 0:
+        image_array.append(cur_row)
+        cur_row = list()
+    cur_row.append(int(c))
+image_array.append(cur_row)
+pprint(image_array)
 
-    print(c, end='')
+plt.imshow(image_array)
+plt.show()
