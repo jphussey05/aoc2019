@@ -220,12 +220,12 @@ if __name__ == "__main__":
                 op = ('0' + op) if len(op) == 1 else op
                 modes = parameter[:-2][::-1] + '000' # flips the modes so they are left to right
                 # print(f'Opcode is {op} and modes are {modes}, calling {switch_dict[op]}')
-                if op == '04':
+                if op == '04':   # output condition
                     cursor, cur_thruster_signal = switch_dict[op](cursor, modes)
-                elif op == '03' and first_input:
+                elif op == '03' and first_input:  # first input, send the phase
                     cursor = switch_dict[op](cursor, modes, input_instr)
                     first_input = False
-                elif op == '03' and not first_input:
+                elif op == '03' and not first_input: # sec input, send last amp
                     cursor = switch_dict[op](cursor, modes, cur_thruster_signal)
                 elif op == '99':
                     break
