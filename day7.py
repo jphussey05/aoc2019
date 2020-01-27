@@ -1,8 +1,6 @@
 from itertools import permutations
 
 
-
-
 def get_nums(cursor, num_items):
 
     answer = []
@@ -172,10 +170,10 @@ def save(cursor, modes, in_val):
 def output(cursor, modes):
     idx = get_nums(cursor, 1)
     if int(modes[0]) == 1:
-        print(f'Mode was immediate, value is {idx[0]}')
+        # print(f'Mode was immediate, value is {idx[0]}')
         return cursor + 2, idx[0]
     else:
-        print(f'Mode was positional, value is {opcodes[idx[0]]}')
+        # print(f'Mode was positional, value is {opcodes[idx[0]]}')
         return cursor + 2, opcodes[idx[0]]
 
 
@@ -185,8 +183,8 @@ def stop(cursor, modes):
 
 if __name__ == "__main__":
 
-    perms = permutations([0,1,2,3,4])
-    # perms = [(4,3,2,1,0)]
+    # perms = permutations([5,6,7,8,9])
+    perms = [(9,8,7,6,5)]
 
     with open('day7.txt') as fin:
         contents = fin.read()    
@@ -208,10 +206,10 @@ if __name__ == "__main__":
 
     max_thruster_signal = 0
     max_thruster_sequence = None
+    cur_thruster_signal = 0   #first time through amplifier input is just zero
 
     for perm in perms:
-        print(f'Checking {perm}')
-        cur_thruster_signal = 0   #first time through amplifier input is just zero
+        # print(f'Checking {perm}')
         for idx, input_instr in enumerate(perm):
             first_input = True
             cursor = 0 
